@@ -1,82 +1,99 @@
-# Lightweight React Template for KAVIA
+# Interior Design Collaborative - Frontend (React)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A user-friendly web interface for creating and sharing interior design floor plans.
 
-## Features
+## Key Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- Responsive multi-panel layout:
+  - Navigation sidebar
+  - Main editor workspace (canvas placeholder + basic toolbar)
+  - Community gallery (grid with cards)
+- Routing for Home, Editor, Gallery, About
+- Ocean Professional theme (blue primary, amber accents)
+- Feature flags via `REACT_APP_FEATURE_FLAGS`
+- No hardcoded secrets; API base read from `REACT_APP_API_BASE` with graceful fallbacks
 
 ## Getting Started
 
-In the project directory, you can run:
+Install dependencies:
 
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```bash
+npm install
 ```
 
-### Components
+Start the development server (port 3000; preview startup remains unchanged):
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+```bash
+npm start
+```
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Build for production:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Routes
 
-### Code Splitting
+- `/` Home
+- `/editor` Editor workspace with toolbar, canvas placeholder, and side panels
+- `/gallery` Community gallery with card grid (can be disabled via flags)
+- `/about` Project info and environment overview
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Environment Variables
 
-### Analyzing the Bundle Size
+Create `.env` in this folder or set variables in your environment. See `.env.example` for reference.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `REACT_APP_API_BASE` (preferred) - Base URL for backend API requests
+- `REACT_APP_BACKEND_URL` (fallback) - Legacy backend URL if `REACT_APP_API_BASE` not set
+- `REACT_APP_FRONTEND_URL` - Public URL of the frontend (optional)
+- `REACT_APP_WS_URL` - WebSocket endpoint (optional)
+- `REACT_APP_NODE_ENV` - Node environment override (optional)
+- `REACT_APP_FEATURE_FLAGS` - Feature flags in JSON or comma list
+  - JSON example: `{"gallery":true,"betaEditor":false}`
+  - List example: `gallery,betaEditor` (interpreted as true for keys)
+- Other variables in container_env are supported but not required by UI
 
-### Making a Progressive Web App
+Graceful handling:
+- If a var is missing, UI falls back to safe defaults and displays “(not configured)” where relevant.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Theming
 
-### Advanced Configuration
+Ocean Professional theme applied via `src/theme.js` and component-level styles:
+- Primary: `#2563EB`
+- Secondary: `#F59E0B`
+- Surface: `#ffffff`
+- Background: `#f9fafb`
+- Text: `#111827`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Code Structure
 
-### Deployment
+```
+src/
+  components/
+    Layout.js      # AppShell layout with sidebar + header + content
+    layout.css     # Layout styling
+  pages/
+    Home.js
+    Editor.js
+    Gallery.js
+    About.js
+  utils/
+    env.js         # Env/feature flag helpers with graceful fallback
+  theme.js         # Theme tokens
+  App.js           # Routing
+  index.js         # React entry
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Security & Compliance
 
-### `npm run build` fails to minify
+- No secrets in code; configuration via env vars only
+- Avoid logging sensitive values; debug logs for missing envs only
+- Feature flags parsed safely (JSON or comma-separated)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Development Notes
+
+- This project uses `react-router-dom@6` for routing.
+- Editor canvas is a placeholder; integrate real drawing logic later.
+- Gallery content is static sample data; wire to API when available.
+
